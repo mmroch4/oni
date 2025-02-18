@@ -1,3 +1,5 @@
+# https://github.com/mmroch4/oni/blob/main/problems/2023/A.py
+
 p = int(input())
 
 [n,m] = input().split()
