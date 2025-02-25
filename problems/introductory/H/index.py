@@ -1,35 +1,49 @@
-import math
+import bisect
+import itertools
 
 n, m = map(int, input().split(' '))
 
 prices = list(map(int, input().split(' ')))
 budgets = list(map(int, input().split(' ')))
 
-
 prices.sort()
 
-for i in range(n):
-  if i == 0:
-    continue
-  
-  prices[i] = prices[i] + prices[i - 1]
+prices_sum = list(itertools.accumulate(prices))
 
-def binary_search(value, list, acc_index):
-  list_length = len(list)
+# for i in range(n):
+#   if i == 0:
+#     continue
   
-  i = math.floor(list_length / 2)
+#   prices[i] = prices[i] + prices[i - 1]
+
+# def binary_search(value, list, acc_index):
+#   list_length = len(list)
   
-  if list_length == 1:
-    return acc_index
+#   i = list_length // 2
   
-  if list[i] == value:
-    return acc_index + i
-  elif list[i] < value:
-    return binary_search(value, list[i:], acc_index + i)
-  elif value < list[i]:
-    return binary_search(value, list[:i], acc_index)
+#   if list_length == 1:
+#     return acc_index
+  
+#   if list[i] == value:
+#     return acc_index + i
+#   elif list[i] < value:
+#     return binary_search(value, list[i:], acc_index + i)
+#   elif value < list[i]:
+#     return binary_search(value, list[:i], acc_index)
+
+# def binary_search(value, list, left, right):
+#   while left < right:
+#     mid = (left + right) // 2
+
+#     if mid == left:
+#       return mid
+
+#     if list[mid] == value:
+#       return mid
+#     elif list[mid] < value:
+#       left = mid
+#     elif value < list[mid]:
+#       right = mid
 
 for budget in budgets:
-  i = binary_search(budget, prices, 0)
-  
-  print(i + 1)
+  print(bisect.bisect(prices_sum, budget))
