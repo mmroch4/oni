@@ -9,24 +9,19 @@ colors = list(map(int, input().split(' ')))
 
 if 1 < n:
   counters = []
-  counter = 0 
+  counter = 1
 
-  for i in range(n + 1):
-    if i == 0:
-      counter = 1
-      continue
-    
-    if i < n:
-      previous = colors[i - 1]
-      current = colors[i]
-    
-      if previous != current:
-        counters.append(counter)
-        counter = 1
-      else:
-        counter += 1
-    else:
+  for i in range(1, n):
+    previous = colors[i - 1]
+    current = colors[i]
+  
+    if previous != current:
       counters.append(counter)
+      counter = 1
+    else:
+      counter += 1
+
+  counters.append(counter)
 
   if p == 1:
     print(len(counters))
