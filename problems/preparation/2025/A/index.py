@@ -1,17 +1,23 @@
+import itertools
+
 p = int(input())
 n = int(input())
 
-hours = [[] for _ in range(24)]
+if p == 1:
+  hours = [0] * 24
 
-for _ in range(n):
-  c, a, b = map(int, input().split(' '))
+  for _ in range(n):
+    c, a, b = map(int, input().split(' '))
 
-  for i in range(24):
-    if a <= i <= b:
-      hours[i].append(str(c))
-    elif b < a and (a <= i or i <= b):
-      hours[i].append(str(c))
+    r = range(a, b + 1) if a <= b else itertools.chain(range(a, 24), range(b + 1))
 
-print(hours)
-
-' '.join(list(map(lambda x:len(x), hours)))
+    for i in r:
+      hours[i] += 1 
+      
+  print(' '.join(list(map(str, hours))))
+else:
+  hours = input().split(' ')
+  
+  l = set(hours)
+  
+  print(len(l))
