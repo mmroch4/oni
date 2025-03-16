@@ -28,28 +28,7 @@ if p == 1:
 
     i += 1
 
-  def remove_empty(a):
-    if len(a):
-      return True
-    
-    return False
-
-  counters = list(filter(remove_empty, raw_counters))
-
-  def does_intersect(a, b):
-    [a_start, a_end] = a
-    [b_start, b_end] = b
-    
-    if a_start - b_end <= 0 and 0 <= a_end - b_start:    
-      return True
-    
-    return False
-
-  def combine_ranges_by_lowest_and_biggest(a, b):
-    start = a[0] if a[0] <= b[0] else b[0]
-    end = a[1] if b[1] <= a[1] else b[1]
-    
-    return [start, end]
+  counters = list(filter(lambda x:len(x), raw_counters))
 
   for u in range(len(counters)):
     a = counters[u]
@@ -60,8 +39,11 @@ if p == 1:
       
       b = counters[k]
       
-      if does_intersect(a, b):
-        new_range = combine_ranges_by_lowest_and_biggest(a, b)
+      if a[0] - b[1] <= 0 and 0 <= a[1] - b[0]:
+        start = a[0] if a[0] <= b[0] else b[0]
+        end = a[1] if b[1] <= a[1] else b[1]
+        
+        new_range = [start, end]
         
         counters[u] = new_range
         counters[k] = new_range
@@ -76,5 +58,15 @@ if p == 1:
 
   print(len(teams))
 else:
-  # TODO
-  print('TODO')
+  s = set()
+  counter = 1
+  
+  for player in converted_players:
+    if player in s:
+      s.clear()
+      counter += 1
+      s.add(player)
+    else:
+      s.add(player)
+      
+  print(counter)
