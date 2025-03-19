@@ -12,17 +12,16 @@ while t:
   
   n = int(input())
   names = input().split(' ')
-  
-  if n == 1:
-    print('Nao')
-    
-    continue
-  
+
   graphs = list(map(convert_name_to_graph, names))
 
   can_combine = False
   
   if p == 1:
+    if n == 1:
+      print('Nao')
+      continue
+  
     starts_by_a_ends = set()
     ends_by_z_starts = set()
 
@@ -60,6 +59,10 @@ while t:
       continue
     
     children = connections[A_TO_INT]
+    
+    if Z_TO_INT in children:
+      print('Sim')
+      continue
     
     checked = set()
     
