@@ -1,31 +1,41 @@
 p = int(input())
-[n, k] = input().split(' ')
-n = int(n)
-k = int(k)
+n, k = map(int, input().split(' '))
 
 cards = list(range(1, n + 1))
 
-for _ in range(k):
-  if p == 1:
-    [a, b] = input().split(' ')
-    a = int(a)
-    b = int(b)
+if p == 1:
+  while k:
+    k -= 1
     
-    [cards[a - 1], cards[b - 1]] = [cards[b - 1], cards[a - 1]]
-  else:
-    x = int(input())
+    a, b = map(int, input().split(' '))
+    a -= 1
+    b -= 1
     
-    left = cards[0:x]
-    right = cards[x:2*x]
-    rest = cards[2*x:len(cards)]
+    backup = cards[a]
+    cards[a] = cards[b]
+    cards[b] = backup
     
-    tempo = []
+  for card in cards:
+    print(card)
+else:
+  while k:
+    k -= 1
     
-    for i in range(x):
-      tempo.append(left[i])
-      tempo.append(right[i])
+    s = int(input())
     
-    cards = tempo + rest
-
-for i in range(n):
-  print(cards[i])
+    rest = cards[2 * s:]
+    aux = []
+    
+    i = 0
+    
+    while i < s:
+      aux.append(cards[i])
+      aux.append(cards[i + s])
+      
+      i += 1
+    
+    aux.extend(rest)
+    cards = aux.copy()
+  
+  for card in cards:
+    print(card)
