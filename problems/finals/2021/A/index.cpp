@@ -8,20 +8,19 @@ bool descending_order(pair<int, int> a, pair<int, int> b) {
 
 int main() {
   int p, n, v;
+  vector<int> mountains;
   
   cin >> p >> n;
   
+  for (int i = 0; i < n; i++)
+  {
+    cin >> v;
+
+    mountains.push_back(v);
+  }
+
   if (p == 1) 
   {
-    vector<int> mountains;
-
-    for (int i = 0; i < n; i++)
-    {
-      cin >> v;
-  
-      mountains.push_back(v);
-    }
-
     sort(mountains.begin(), mountains.end());
     
     int counter = 1;
@@ -46,9 +45,7 @@ int main() {
 
     for (int i = 0; i < n; i++) 
     {
-      cin >> v;
-  
-      indexed_mountains.push_back({v, i});
+      indexed_mountains.push_back({mountains[i], i});
     }
     
     sort(indexed_mountains.begin(), indexed_mountains.end(), descending_order);
@@ -86,7 +83,7 @@ int main() {
         r++;
         l--;
 
-        if (0 <= l && r < n && exclude.count(l) == 0 && exclude.count(r) == 0) 
+        if (0 <= l && r < n && exclude.count(l) == 0 && exclude.count(r) == 0 && mountains[l] < indexed_mountains[i].first && mountains[r] < indexed_mountains[i].first) 
         {
           // cout << "range: " << l << " " << r << "\n";
           // cout << "before acc: " << acc << "\n";
