@@ -64,36 +64,7 @@ int main() {
     values.push_back(v);
   }
   
-  if (p == 1) {
-    stable_sort(values.begin(), values.end());
-
-    int counter = -1;
-    int current = -1;
-
-    long long acc = 0;
-
-    for (int i = 0; i < n; i++) {
-      if (values[i] == current) {
-        counter++;
-
-        if (i == n - 1 && 2 <= counter) {
-          acc += fact(counter) / (2 * fact(counter - 2));
-        }
-
-        continue;
-      }
-
-      if (2 <= counter) {
-        acc += fact(counter) / (2 * fact(counter - 2));
-      }
-
-      counter = 1;
-      current = values[i];
-    }
-
-    cout << acc << "\n";
-  }
-  else {
+  
     int acc = n;
     int m = 0;
     vector<int> odd_nums, even_nums;
@@ -106,7 +77,6 @@ int main() {
         odd_nums.push_back(values[i]);
       }
     }
-    
     
     for (int i = 0; i < (int)even_nums.size() - 1; i++) {
       int uni_i = 2 * i;
