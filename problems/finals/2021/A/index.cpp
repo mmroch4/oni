@@ -2,145 +2,110 @@
 
 using namespace std;
 
+bool descending_order(pair<int, int> a, pair<int, int> b) {
+  return b.first < a.first;
+}
+
 int main() {
   int p, n, v;
   vector<int> mountains;
-
+  
   cin >> p >> n;
-
+  
   for (int i = 0; i < n; i++)
   {
     cin >> v;
 
     mountains.push_back(v);
   }
-  
-  stable_sort(mountains.begin(), mountains.end());
 
-  int counter = 1;
-  int acc = 0;
-
-  for (int i = 1; i < n; i++)
+  if (p == 1) 
   {
-    if (mountains[i] == mountains[i - 1]) {
-      acc += counter;
-      counter++;
-    }
-    else {
-      counter = 1;
-    }
-  }
-  
-  cout << acc << "\n";
-}
-
-
-/*
-
-long long fact(int n) {
-  if (n <= 1) {
-    return 1;
-  }
-
-  long long acc = 1;
-
-  for (int i = 2; i <= (long long)n; i++)
-  {
-    acc *= (long long)i;
-  }
-
-  return acc;
-}
-
-int main() {
-  int p, n, v;
-  vector<int> values;
-  cin >> p >> n;
-
-  for (int i = 0; i < n; i++)
-  {
-    cin >> v;
-
-    values.push_back(v);
-  }
-  
-  
-    int acc = n;
-    int m = 0;
-    vector<int> odd_nums, even_nums;
-
-    for (int i = 0; i < n; i++) {
-      if (i % 2 == 0) {
-        even_nums.push_back(values[i]);
+    sort(mountains.begin(), mountains.end());
+    
+    int counter = 1;
+    int acc = 0;
+    
+    for (int i = 1; i < n; i++)
+    {
+      if (mountains[i] == mountains[i - 1]) {
+        acc += counter;
+        counter++;
       }
       else {
-        odd_nums.push_back(values[i]);
+        counter = 1;
       }
     }
     
-    for (int i = 0; i < (int)even_nums.size() - 1; i++) {
-      int uni_i = 2 * i;
+    cout << acc << "\n";
+  }
+  else 
+  {
+    vector<pair<int, int>> indexed_mountains;
 
-      // cout << "RODADA: " << i << ":\n";
-      for (int p = i + 1; p < (int)even_nums.size(); p++) {
-        int uni_p = 2 * p;
-        int middle = uni_i + floor((uni_p - uni_i) / 2);
-        
-        // cout << "FROM: " << i << " (" << uni_i << ") TO: " << p << " (" << uni_p << ") \n";
-
-        auto r = *max_element(values.begin() + uni_i, values.begin() + middle);
-        auto l = *max_element(values.begin() + middle + 1, values.begin() + uni_p + 1);
-
-        if (r < values[middle] && l < values[middle]) {
-          acc++;
-
-          int range = uni_p - uni_i + 1;
-          // cout << "---- MATCH -----" << "\n"; 
-
-          if (range > m) {
-            m = range;
-          }
-        }
-
-        // cout << "LEFT: " << l << "RIGHT: " << r << " MIDDLE: " << values[middle] << endl;
-      }
-      
-      // cout << "--------------- \n";
-    }
-
-    for (int i = 0; i < (int)odd_nums.size() - 1; i++) {
-      int uni_i = 2 * i + 1;
-
-      // cout << "RODADA: " << i << ":\n";
-      for (int p = i + 1; p < (int)odd_nums.size(); p++) {
-        int uni_p = 2 * p + 1;
-        int middle = uni_i + floor((uni_p - uni_i) / 2);
-        
-        // cout << "FROM: " << i << " (" << uni_i << ") TO: " << p << " (" << uni_p << ") \n";
-
-        auto r = *max_element(values.begin() + uni_i, values.begin() + middle);
-        auto l = *max_element(values.begin() + middle + 1, values.begin() + uni_p + 1);
-
-        if (r < values[middle] && l < values[middle]) {
-          acc++;
-
-          // cout << "---- MATCH -----" << "\n"; 
-          
-          int range = uni_p - uni_i + 1;
-
-          if (range > m) {
-            m = range;
-          }
-        }
-
-        // cout << "MAIOR: " << r << " MIDDLE: " << values[middle] << endl;
-      }
-      
-      // cout << "--------------- \n";
+    for (int i = 0; i < n; i++) 
+    {
+      indexed_mountains.push_back({mountains[i], i});
     }
     
+    sort(indexed_mountains.begin(), indexed_mountains.end(), descending_order);
 
-    cout << m << " " << acc << "\n";
+    unordered_set<int> exclude;
+
+    int acc = n;
+    int max_range = 1;
+
+    for (int i = 0; i < n; i++)
+    {
+      int global_index = indexed_mountains[i].second;
+
+      // cout << " ------------- NUM: " << indexed_mountains[i].first << "---------------- \n";
+      
+      if (i == 0) 
+      {
+        // cout << "-- BIGGEST -- " << indexed_mountains[i].first << " " << indexed_mountains[i].second << "\n";
+        // cout << "before acc: " << acc << "\n";
+        int p = min(global_index, n - 1 - global_index);
+        acc += p;
+        max_range = max(max_range, p * 2 + 1);
+        // cout << "after acc: " << acc << "\n";
+        exclude.insert(global_index);
+        continue;
+      }
+
+      int r, l;
+      r = l = global_index;
+
+      bool stop = false;
+
+      while (!stop)
+      {
+        r++;
+        l--;
+
+        if (0 <= l && r < n && exclude.count(l) == 0 && exclude.count(r) == 0 && mountains[l] < indexed_mountains[i].first && mountains[r] < indexed_mountains[i].first) 
+        {
+          // cout << "range: " << l << " " << r << "\n";
+          // cout << "before acc: " << acc << "\n";
+          acc++;
+          // cout << "after acc: " << acc << "\n";
+          continue;
+        }
+        else 
+        {
+          // cout << "impossible range " << l << " " << r << "\n";
+          l++;
+          r--;
+
+          max_range = max(max_range, r - l + 1);
+          stop = true;
+          break;
+        }
+      }
+      
+      exclude.insert(global_index);
+    }
+    
+    cout << max_range << " " << acc << "\n";
   }
 }
-  */
